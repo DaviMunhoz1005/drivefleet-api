@@ -1,3 +1,35 @@
 spring:
   application:
     name: drivefleet
+
+  datasource:
+    url: jdbc:mysql://mysql:3306/drivefleet?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: dev
+    password: dev123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    open-in-view: false
+    show-sql: true
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
