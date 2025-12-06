@@ -43,7 +43,7 @@ public class Vehicle {
     private BigDecimal mileage;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal value;
+    private BigDecimal price;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
