@@ -3,6 +3,7 @@ package com.drivefleet.drivefleet.service;
 import com.drivefleet.drivefleet.domain.dto.UserRequest;
 import com.drivefleet.drivefleet.domain.dto.UserResponse;
 import com.drivefleet.drivefleet.domain.entities.User;
+import com.drivefleet.drivefleet.exceptions.EmailAlreadyInUseException;
 import com.drivefleet.drivefleet.exceptions.UserNotFoundException;
 import com.drivefleet.drivefleet.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,6 @@ public class UserService {
 
     @Transactional
     public UserResponse create(UserRequest request) {
-
         if (userRepository.existsByEmail(request.email())) {
             throw new IllegalArgumentException("Email already in use");
         }
@@ -48,8 +48,24 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteById(UUID id) {
+    public UserResponse update(UUID id, UserRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id.toString()));
 
+        user.setName(request.name());
+
+        if (!user.getEmail().equals(request.email()) &&
+                userRepository.existsByEmail(request.email())) {
+            throw new EmailAlreadyInUseException(request.email());
+        }
+        user.setEmail(request.email());
+        user.setPassword(passwordEncoder.encode(request.password()));
+
+        return convertToResponse(user);
+    }
+
+    @Transactional
+    public void deleteById(UUID id) {
         if (!userRepository.existsById(id)) {
             throw new UserNotFoundException(id.toString());
         }
