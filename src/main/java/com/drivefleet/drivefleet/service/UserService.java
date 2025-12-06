@@ -46,5 +46,15 @@ public class UserService {
         userRepository.save(newUser);
         return convertToResponse(newUser);
     }
+
+    @Transactional
+    public void deleteById(UUID id) {
+
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundException(id.toString());
+        }
+
+        userRepository.deleteById(id);
+    }
 }
 
