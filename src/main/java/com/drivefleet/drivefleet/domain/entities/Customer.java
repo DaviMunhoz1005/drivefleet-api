@@ -19,9 +19,6 @@ public class Customer {
     @Column(columnDefinition = "CHAR(36)")
     private UUID id;
 
-    @Column(nullable = false)
-    private String name;
-
     @Column(nullable = false, unique = true)
     private Long cpf;
 
@@ -30,5 +27,9 @@ public class Customer {
 
     @Column(nullable = false)
     private String address;
+
+    @OneToOne(optional = false)
+    @JoinColumn(name = "user_id", unique = true)
+    private User user;
 }
 
