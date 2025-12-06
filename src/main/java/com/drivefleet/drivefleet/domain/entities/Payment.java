@@ -26,7 +26,7 @@ public class Payment {
     private LocalDate paymentDate;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal value;
+    private BigDecimal price;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
