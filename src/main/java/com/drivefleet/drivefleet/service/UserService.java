@@ -1,7 +1,7 @@
 package com.drivefleet.drivefleet.service;
 
-import com.drivefleet.drivefleet.domain.dto.UserRequest;
-import com.drivefleet.drivefleet.domain.dto.UserResponse;
+import com.drivefleet.drivefleet.domain.dto.user.UserRequest;
+import com.drivefleet.drivefleet.domain.dto.user.UserResponse;
 import com.drivefleet.drivefleet.domain.entities.User;
 import com.drivefleet.drivefleet.exceptions.EmailAlreadyInUseException;
 import com.drivefleet.drivefleet.exceptions.UserNotFoundEmailException;
@@ -21,17 +21,17 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserResponse convertToResponse(User user) {
-        return new UserResponse(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                user.getRole()
-        );
+    protected UserResponse convertToResponse(User user) {
+        return UserResponse.builder()
+                .id(user.getId())
+                .email(user.getName())
+                .name(user.getEmail())
+                .role(user.getRole())
+                .build();
     }
 
     @Transactional
-    public UserResponse create(UserRequest request) {
+    protected User create(UserRequest request) {
         if (userRepository.existsByEmail(request.email())) {
             throw new IllegalArgumentException("Email already in use");
         }
@@ -44,11 +44,11 @@ public class UserService {
                 .build();
 
         userRepository.save(newUser);
-        return convertToResponse(newUser);
+        return newUser;
     }
 
     @Transactional
-    public UserResponse update(UUID id, UserRequest request) {
+    protected UserResponse update(UUID id, UserRequest request) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundIdException(id.toString()));
 
@@ -65,7 +65,7 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteById(UUID id) {
+    protected void deleteById(UUID id) {
         if (!userRepository.existsById(id)) {
             throw new UserNotFoundIdException(id.toString());
         }
@@ -73,12 +73,12 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public UserResponse findById(UUID id) {
+    protected UserResponse findById(UUID id) {
         return convertToResponse(userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundIdException(id.toString())));
     }
 
-    public UserResponse findByEmail(String email) {
+    protected UserResponse findByEmail(String email) {
         return convertToResponse(userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundEmailException(email)));
     }

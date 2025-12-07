@@ -1,4 +1,4 @@
-package com.drivefleet.drivefleet.domain.dto;
+package com.drivefleet.drivefleet.domain.dto.user;
 
 import com.drivefleet.drivefleet.domain.enums.UserRole;
 import jakarta.validation.constraints.Email;
