@@ -2,7 +2,7 @@ package com.drivefleet.drivefleet.service;
 
 import com.drivefleet.drivefleet.domain.dto.seller.SellerRequest;
 import com.drivefleet.drivefleet.domain.dto.seller.SellerResponse;
-import com.drivefleet.drivefleet.domain.dto.user.UserResponse;
+import com.drivefleet.drivefleet.domain.entities.SalesOrder;
 import com.drivefleet.drivefleet.domain.entities.Seller;
 import com.drivefleet.drivefleet.domain.entities.User;
 import com.drivefleet.drivefleet.domain.enums.UserStatus;
@@ -47,7 +47,7 @@ public class SellerService {
     @Transactional
     public void deleteById(UUID id) {
         Seller seller = ensureExists(id);
-        if (!seller.getSales().isEmpty()) {
+        if (seller.getSales() == null || !seller.getSales().isEmpty()) {
             throw new SellerCannotBeExcludedException(id.toString());
         }
         userService.deleteById(seller.getUser().getId());
@@ -70,10 +70,13 @@ public class SellerService {
                 .id(seller.getId())
                 .registrationNumber(seller.getRegistrationNumber())
                 .user(userService.convertToResponse(seller.getUser()))
-                .sales(seller.getSales()
-                        .stream()
-                        .map(salesOrderService::convertToResponse)
-                        .toList()
+                .sales(
+                        seller.getSales() == null || seller.getSales().isEmpty()
+                                ? List.of()
+                                : seller.getSales()
+                                .stream()
+                                .map(salesOrderService::convertToResponse)
+                                .toList()
                 )
                 .build();
     }
