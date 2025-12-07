@@ -3,6 +3,7 @@ package com.drivefleet.drivefleet.domain.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -25,5 +26,8 @@ public class Seller {
 
     @Column(nullable = false, unique = true)
     private Long registrationNumber;
+
+    @OneToMany(mappedBy = "seller")
+    private List<SalesOrder> sales;
 }
 

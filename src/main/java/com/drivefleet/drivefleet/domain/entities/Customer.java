@@ -3,6 +3,7 @@ package com.drivefleet.drivefleet.domain.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -31,5 +32,8 @@ public class Customer {
     @OneToOne(optional = false)
     @JoinColumn(name = "user_id", unique = true)
     private User user;
+
+    @OneToMany(mappedBy = "customer")
+    private List<SalesOrder> orders;
 }
 
