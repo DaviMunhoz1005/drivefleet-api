@@ -24,7 +24,7 @@ public class Seller {
     @JoinColumn(name = "user_id", unique = true)
     private User user;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, updatable = false)
     private Long registrationNumber;
 
     @OneToMany(mappedBy = "seller")

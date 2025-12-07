@@ -2,6 +2,7 @@ package com.drivefleet.drivefleet.repository;
 
 import com.drivefleet.drivefleet.domain.entities.User;
 import com.drivefleet.drivefleet.domain.enums.UserRole;
+import com.drivefleet.drivefleet.domain.enums.UserStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ class UserRepositoryTest {
                 .email("email@test.com")
                 .password("123456")
                 .role(UserRole.CUSTOMER)
+                .status(UserStatus.ACTIVE)
                 .build();
     }
 
