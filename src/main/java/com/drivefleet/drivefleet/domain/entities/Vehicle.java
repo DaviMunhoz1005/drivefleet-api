@@ -48,4 +48,8 @@ public class Vehicle {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private VehicleStatus status;
+
+    @OneToOne(mappedBy = "vehicle")
+    @JoinColumn(name = "sales_order_id", unique = true)
+    private SalesOrder salesOrder;
 }
